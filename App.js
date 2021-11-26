@@ -12,17 +12,23 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [user, setUser] = useState(null);
 
+  function setUserFromChild(value) {
+    setUser(value);
+  }
+
   return (
     <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator>
           {user ? (
-            <Stack.Screen name='Home'>
-              {(props) => <HomeScreen {...props} extraData={user} />}
-            </Stack.Screen>
+            <Stack.Screen name='Home' component={HomeScreen} />
           ) : (
             <>
-              <Stack.Screen name='Login' component={LoginScreen} />
+              <Stack.Screen name='Login'>
+                {(props) => (
+                  <LoginScreen {...props} setUserFromChild={setUserFromChild} />
+                )}
+              </Stack.Screen>
               <Stack.Screen
                 name='Registration'
                 component={RegistrationScreen}

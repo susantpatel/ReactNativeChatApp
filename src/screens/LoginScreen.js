@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { Button } from 'react-native-paper';
 
 import { app } from '../firebaseCofig';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, setUserFromChild }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userId, setUserId] = useState('');
 
   const onFooterLinkPress = () => {
     navigation.navigate('Registration');
   };
 
   function handleSubmitButton() {
-    const auth = getAuth(app);
-    createUserWithEmailAndPassword(auth, email, password)
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
+        setUserFromChild(user.email);
       })
       .catch((error) => {
         console.log(error);
@@ -47,18 +47,17 @@ export default function LoginScreen({ navigation }) {
           onChangeText={(password) => setPassword(password)}
         />
 
-        <TextInput
-          style={styles.textInput}
-          mode='outlined'
-          label='userId'
-          value={userId}
-          onChangeText={(userId) => setUserId(userId)}
-        />
-
         <Button mode='contained' onPress={handleSubmitButton}>
           Submit
         </Button>
       </KeyboardAwareScrollView>
+
+      <Text style={styles.footerText}>
+        Don't have an account?
+        <Text onPress={onFooterLinkPress} style={styles.footerLink}>
+          Sign Up
+        </Text>
+      </Text>
     </View>
   );
 }
@@ -72,5 +71,14 @@ const styles = StyleSheet.create({
   },
   textInput: {
     marginBottom: 20,
+  },
+  footerText: {
+    fontSize: 16,
+    color: '#2e2e2d',
+  },
+  footerLink: {
+    color: '#788eec',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
