@@ -4,7 +4,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { Button } from 'react-native-paper';
 
-import { app } from '../firebaseCofig';
+import { app } from '../../firebase/firebaseCofig';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function LoginScreen({ navigation, setUserFromChild }) {

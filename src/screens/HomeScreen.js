@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
 import * as Location from 'expo-location';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import CategoriesScreenNavigator from './CategoriesScreenNavigator';
+import ChatScreen from './ChatScreen';
 
 export default function HomeScreen() {
+  const Tab = createBottomTabNavigator();
   const [location, setLocation] = useState(null);
   useEffect(() => {
     (async () => {
@@ -13,9 +17,15 @@ export default function HomeScreen() {
       console.log(location);
     })();
   }, []);
+
   return (
-    <View>
-      <Text>Homepage</Text>
-    </View>
+    <Tab.Navigator>
+      <Tab.Screen
+        name='CategoriesScreenNavigator'
+        component={CategoriesScreenNavigator}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen name='Chat' component={ChatScreen} />
+    </Tab.Navigator>
   );
 }
